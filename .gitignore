@@ -6,3 +6,6 @@ dist
 .env.production
 .env.development
 prisma/dev.db
+
+apps/**/.env
+apps/**/.env.*

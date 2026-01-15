@@ -5,35 +5,42 @@ services:
       POSTGRES_USER: sebelas
       POSTGRES_PASSWORD: sebelas
       POSTGRES_DB: sebelas
-    ports:
-      - "5432:5432"
+    # JANGAN expose ke publik
+    # ports:
+    #   - "5432:5432"
     volumes:
       - postgres_data:/var/lib/postgresql/data
+
   redis:
     image: redis:7
-    ports:
-      - "6379:6379"
+    # JANGAN expose ke publik
+    # ports:
+    #   - "6379:6379"
+
   api:
     build: ./apps/api
-    env_file: ./apps/api/.env.example
+    env_file: ./apps/api/.env
     ports:
-      - "4000:4000"
+      - "127.0.0.1:4000:4000"
     depends_on:
       - postgres
       - redis
+
   admin-web:
     build: ./apps/admin-web
-    env_file: ./apps/admin-web/.env.example
+    env_file: ./apps/admin-web/.env
     ports:
-      - "3000:3000"
+      - "127.0.0.1:3000:3000"
     depends_on:
       - api
+
   store-web:
     build: ./apps/store-web
-    env_file: ./apps/store-web/.env.example
+    env_file: ./apps/store-web/.env
     ports:
-      - "3001:3000"
+      - "127.0.0.1:3001:3000"
     depends_on:
       - api
+
 volumes:
   postgres_data:
