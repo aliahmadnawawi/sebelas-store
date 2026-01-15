@@ -1,22 +1,23 @@
-import { NextResponse } from 'next/server';
-import type { NextRequest } from 'next/server';
+import { NextResponse } from 'next/server'
+import type { NextRequest } from 'next/server'
 
 export function middleware(req: NextRequest) {
-  const token = req.cookies.get('sebelas_session');
+  const token = req.cookies.get('sebelas_session')
+  const { pathname } = req.nextUrl
 
-  // belum login → lempar ke /login
-  if (!token && !req.nextUrl.pathname.startsWith('/login')) {
-    return NextResponse.redirect(new URL('/login', req.url));
+  // Allow auth page
+  if (pathname.startsWith('/auth')) {
+    return NextResponse.next()
   }
 
-  // sudah login → jangan bisa buka /login
-  if (token && req.nextUrl.pathname === '/login') {
-    return NextResponse.redirect(new URL('/', req.url));
+  // If not logged in → redirect to Codex auth
+  if (!token) {
+    return NextResponse.redirect(new URL('/auth', req.url))
   }
 
-  return NextResponse.next();
+  return NextResponse.next()
 }
 
 export const config = {
   matcher: ['/((?!_next|favicon.ico).*)'],
-};
+}
