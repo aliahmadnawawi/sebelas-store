@@ -1,0 +1,39 @@
+{
+  "name": "sebelas-api",
+  "version": "0.1.0",
+  "private": true,
+  "type": "commonjs",
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "start": "node dist/main.js",
+    "start:dev": "ts-node --transpile-only src/main.ts",
+    "prisma:generate": "prisma generate",
+    "prisma:migrate": "prisma migrate deploy",
+    "prisma:seed": "ts-node prisma/seed.ts"
+  },
+  "dependencies": {
+    "@nestjs/common": "^10.3.2",
+    "@nestjs/config": "^3.2.3",
+    "@nestjs/core": "^10.3.2",
+    "@nestjs/platform-express": "^10.3.2",
+    "@nestjs/platform-socket.io": "^10.3.2",
+    "@nestjs/websockets": "^10.4.2",
+    "@prisma/client": "^5.18.0",
+    "bcryptjs": "^2.4.3",
+    "bullmq": "^5.18.1",
+    "ioredis": "^5.4.1",
+    "prisma": "^5.18.0",
+    "reflect-metadata": "^0.1.14",
+    "rxjs": "^7.8.1",
+    "socket.io": "^4.7.5"
+  },
+  "devDependencies": {
+    "@types/bcryptjs": "^2.4.6",
+    "@types/node": "^20.14.12",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.5.4"
+  },
+  "prisma": {
+    "seed": "ts-node prisma/seed.ts"
+  }
+}

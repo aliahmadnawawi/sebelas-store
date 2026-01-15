@@ -1,0 +1,106 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum Role {
+  ADMIN
+  OWNER
+  STAFF
+}
+
+enum ChannelType {
+  TELEGRAM
+  WHATSAPP
+  EMAIL
+}
+
+enum BotType {
+  TELEGRAM
+  WHATSAPP
+}
+
+model User {
+  id           String   @id @default(uuid())
+  email        String   @unique
+  name         String
+  passwordHash String
+  role         Role     @default(OWNER)
+  stores       Store[]
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+}
+
+model Store {
+  id          String            @id @default(uuid())
+  name        String
+  slug        String            @unique
+  ownerId     String?
+  owner       User?             @relation(fields: [ownerId], references: [id])
+  products    Product[]
+  channels    Channel[]
+  bots        Bot[]
+  payments    PaymentProvider[]
+  orders      Order[]
+  createdAt   DateTime          @default(now())
+  updatedAt   DateTime          @updatedAt
+}
+
+model Product {
+  id          String   @id @default(uuid())
+  storeId     String
+  store       Store    @relation(fields: [storeId], references: [id])
+  name        String
+  description String?
+  price       Int
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model Channel {
+  id        String      @id @default(uuid())
+  storeId   String
+  store     Store       @relation(fields: [storeId], references: [id])
+  type      ChannelType
+  handle    String?
+  createdAt DateTime    @default(now())
+  updatedAt DateTime    @updatedAt
+}
+
+model Bot {
+  id             String   @id @default(uuid())
+  storeId        String
+  store          Store    @relation(fields: [storeId], references: [id])
+  type           BotType
+  name           String
+  tokenEncrypted String?
+  webhookUrl     String?
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+}
+
+model PaymentProvider {
+  id              String   @id @default(uuid())
+  storeId         String
+  store           Store    @relation(fields: [storeId], references: [id])
+  provider        String
+  apiKeyEncrypted String?
+  callbackUrl     String?
+  enabled         Boolean  @default(true)
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+}
+
+model Order {
+  id        String   @id @default(uuid())
+  storeId   String
+  store     Store    @relation(fields: [storeId], references: [id])
+  status    String   @default("pending")
+  total     Int?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
