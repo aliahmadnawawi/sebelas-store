@@ -9,9 +9,11 @@ import { WebhooksModule } from './webhooks/webhooks.module';
 import { InboxModule } from './inbox/inbox.module';
 import { QueueModule } from './queue/queue.module';
 import { PaymentsModule } from './payments/payments.module';
+import { AuthModule } from './auth/auth.module';
 
 @Module({
   imports: [
+    AuthModule,
     ConfigModule.forRoot({ isGlobal: true }),
     PrismaModule,
     QueueModule,
@@ -20,8 +22,8 @@ import { PaymentsModule } from './payments/payments.module';
     BotsModule,
     PaymentsModule,
     WebhooksModule,
-    InboxModule
+    InboxModule,
   ],
-  controllers: [HealthController]
+  controllers: [HealthController],
 })
 export class AppModule {}
